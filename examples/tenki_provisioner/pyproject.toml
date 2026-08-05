@@ -1,0 +1,47 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tenki-jupyter-provisioner"
+version = "0.1.0"
+description = "Run Jupyter kernels inside Tenki Sandbox microVMs (a jupyter_client kernel provisioner)."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "BSD-3-Clause"
+keywords = ["jupyter", "kernel", "provisioner", "tenki", "sandbox", "microvm"]
+authors = [{ name = "Tenki Cloud integration" }]
+dependencies = [
+    "jupyter_client>=7.0",
+    # `tenki` is the current SDK (successor to `tenki-sandbox`). Pin to the
+    # 0.5.x line this integration is developed and tested against.
+    "tenki>=0.5.4,<0.6",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7", "pytest-asyncio>=0.23", "ipykernel>=6"]
+
+[project.urls]
+Homepage = "https://tenki.cloud/docs/sandbox"
+Source = "https://github.com/jupyter/jupyter_client"
+
+# This is the extension point jupyter_client uses to discover provisioners.
+[project.entry-points."jupyter_client.kernel_provisioners"]
+tenki-provisioner = "tenki_provisioner:TenkiProvisioner"
+
+[tool.hatch.build.targets.wheel]
+packages = ["tenki_provisioner"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+# Inherit the repository's ruff configuration and relax a few rules that are
+# legitimate for a CLI installer, a runnable e2e script, and tests.
+[tool.ruff]
+extend = "../../pyproject.toml"
+
+[tool.ruff.lint.per-file-ignores]
+"tenki_provisioner/kernelspec.py" = ["T201"]     # a CLI prints to the user
+"tests/live_e2e.py" = ["T201"]                    # a runnable script prints progress
+"tests/test_provisioner.py" = ["EM101", "EM102", "RUF059"]  # test ergonomics

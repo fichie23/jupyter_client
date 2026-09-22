@@ -1,0 +1,18 @@
+# Disposable smoke test for the Tenki alpha preprod runner fleet.
+# Scoped to its own branch so it never runs on main or on pull requests.
+name: alpha runner smoke
+
+on:
+  push:
+    branches: ["alpha-runner-smoke"]
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: tenki-alpha-standard-2c-4g
+    timeout-minutes: 10
+    steps:
+      - name: Report the runner that picked up the job
+        run: |
+          echo "runner: ${RUNNER_NAME:-unknown}"
+          echo "os: $(uname -a)"

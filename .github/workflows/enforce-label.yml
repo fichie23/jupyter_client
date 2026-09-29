@@ -5,7 +5,7 @@ on:
     types: [labeled, unlabeled, opened, edited, synchronize]
 jobs:
   enforce-label:
-    runs-on: ubuntu-latest
+    runs-on: tenki-staging-standard-small-2c-4g
     permissions:
       pull-requests: write
     steps:

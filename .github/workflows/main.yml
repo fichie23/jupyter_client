@@ -4,7 +4,6 @@ on:
   push:
     branches: ["main"]
   pull_request:
-
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
@@ -18,7 +17,7 @@ env:
 
 jobs:
   check_release:
-    runs-on: ubuntu-latest
+    runs-on: tenki-staging-standard-small-2c-4g
     env:
       HATCH_ENV: ""
     steps:
@@ -29,14 +28,14 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
   check_links:
-    runs-on: ubuntu-latest
+    runs-on: tenki-staging-standard-small-2c-4g
     steps:
       - uses: actions/checkout@v4
       - uses: jupyterlab/maintainer-tools/.github/actions/base-setup@v1
       - uses: jupyterlab/maintainer-tools/.github/actions/check-links@v1
 
   test:
-    runs-on: ${{ matrix.os }}
+    runs-on: tenki-staging-standard-small-2c-4g
     timeout-minutes: 20
 
     strategy:
@@ -83,7 +82,7 @@ jobs:
       - uses: jupyterlab/maintainer-tools/.github/actions/upload-coverage@v1
 
   coverage:
-    runs-on: ubuntu-latest
+    runs-on: tenki-staging-standard-small-2c-4g
     needs:
       - test
     steps:
@@ -93,7 +92,7 @@ jobs:
           fail_under: 78
 
   docs:
-    runs-on: ubuntu-latest
+    runs-on: tenki-staging-standard-small-2c-4g
     steps:
       - uses: actions/checkout@v4
       - uses: jupyterlab/maintainer-tools/.github/actions/base-setup@v1
@@ -119,7 +118,7 @@ jobs:
 
   lint:
     name: Test Lint
-    runs-on: ubuntu-latest
+    runs-on: tenki-staging-standard-small-2c-4g
     steps:
       - uses: actions/checkout@v4
       - uses: jupyterlab/maintainer-tools/.github/actions/base-setup@v1
@@ -132,7 +131,7 @@ jobs:
 
   test_minimum_verisons:
     name: Test Minimum Versions
-    runs-on: ubuntu-latest
+    runs-on: tenki-staging-standard-small-2c-4g
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
@@ -158,7 +157,7 @@ jobs:
   test_prereleases:
     name: Test Prereleases
     timeout-minutes: 10
-    runs-on: ubuntu-latest
+    runs-on: tenki-staging-standard-small-2c-4g
     steps:
       - uses: actions/checkout@v4
       - uses: jupyterlab/maintainer-tools/.github/actions/base-setup@v1
@@ -171,7 +170,7 @@ jobs:
 
   make_sdist:
     name: Make SDist
-    runs-on: ubuntu-latest
+    runs-on: tenki-staging-standard-small-2c-4g
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
@@ -179,7 +178,7 @@ jobs:
       - uses: jupyterlab/maintainer-tools/.github/actions/make-sdist@v1
 
   test_sdist:
-    runs-on: ubuntu-latest
+    runs-on: tenki-staging-standard-small-2c-4g
     needs: [make_sdist]
     name: Install from SDist and Test
     timeout-minutes: 20
@@ -199,7 +198,7 @@ jobs:
       - test_minimum_verisons
       - test_prereleases
       - test_sdist
-    runs-on: ubuntu-latest
+    runs-on: tenki-staging-standard-small-2c-4g
     steps:
       - name: Decide whether the needed jobs succeeded or failed
         uses: re-actors/alls-green@release/v1

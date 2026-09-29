@@ -4,14 +4,13 @@ on:
   push:
     branches: ["main"]
   pull_request:
-
 concurrency:
   group: downstream-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   ipykernel:
-    runs-on: ubuntu-latest
+    runs-on: tenki-staging-standard-small-2c-4g
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
@@ -21,7 +20,7 @@ jobs:
           package_name: ipykernel
 
   nbclient:
-    runs-on: ubuntu-latest
+    runs-on: tenki-staging-standard-small-2c-4g
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
@@ -34,7 +33,7 @@ jobs:
           test_command: "pytest -vv -raXxs -W default --durations 10 --color=yes --deselect tests/test_client.py::test_run_all_notebooks[update-display-id.ipynb-opts14]"
 
   nbconvert:
-    runs-on: ubuntu-latest
+    runs-on: tenki-staging-standard-small-2c-4g
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
@@ -45,7 +44,7 @@ jobs:
           package_spec: ".[test]"
 
   jupyter_server:
-    runs-on: ubuntu-latest
+    runs-on: tenki-staging-standard-small-2c-4g
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
@@ -55,7 +54,7 @@ jobs:
           package_name: jupyter_server
 
   jupyter_kernel_test:
-    runs-on: ubuntu-latest
+    runs-on: tenki-staging-standard-small-2c-4g
     timeout-minutes: 10
     steps:
       - name: Checkout
@@ -82,7 +81,7 @@ jobs:
           python -m unittest -v
 
   qtconsole:
-    runs-on: ubuntu-latest
+    runs-on: tenki-staging-standard-small-2c-4g
     timeout-minutes: 20
     steps:
       - name: Checkout
@@ -127,7 +126,7 @@ jobs:
       - jupyter_server
       - jupyter_kernel_test
       - qtconsole
-    runs-on: ubuntu-latest
+    runs-on: tenki-staging-standard-small-2c-4g
     steps:
       - name: Decide whether the needed jobs succeeded or failed
         uses: re-actors/alls-green@release/v1
